@@ -19,6 +19,7 @@ export default function DetailsAlbum(props) {
       const response = await api.get(`/albums/${id}`);
 
       setAlbums(response.data);
+       
       
       
 
@@ -28,7 +29,19 @@ export default function DetailsAlbum(props) {
     
   }, [albums])
 
+
+  useEffect(() =>{
+   
  
+    return () => {
+      if(image.preview !== ""){
+        if(window.confirm("deseja alterar a imagem")){
+          handleUpload();
+        } 
+      }   
+    }
+  },[image.preview])
+
   async function handleDeleteSong(id) {
     try {
       if (!window.confirm("Deseja mesmo excluir a musica?")) return;
@@ -65,11 +78,10 @@ export default function DetailsAlbum(props) {
     });
   }
 
-  async function handleUpload(e) {
-    e.preventDefault();
+  async function handleUpload() {
+    
     const formData = new FormData();
     formData.append('album_image', image.raw);
-
 
     await api.put(`/albums/${id}/photo`, formData);
     
