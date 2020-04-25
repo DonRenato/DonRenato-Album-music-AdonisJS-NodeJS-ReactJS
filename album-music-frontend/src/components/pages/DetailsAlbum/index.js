@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link} from 'react-router-dom';
 import api from '../../../services/api';
 import CreateSong from '../CreateSong';
 
@@ -11,6 +11,7 @@ export default function DetailsAlbum(props) {
   const [songs, setSongs] = useState([]);
   const [image, setImage] = useState({ preview: '', raw: '' });
   const { id } = props.match.params;
+ 
 
   
   useEffect(() => {
@@ -32,13 +33,14 @@ export default function DetailsAlbum(props) {
 
   useEffect(() =>{
    
- 
+    if(image.preview !== "")
     return () => {
       if(image.preview !== ""){
         if(window.confirm("deseja alterar a imagem")){
           handleUpload();
+          
         } 
-      }   
+      } 
     }
   },[image.preview])
 
@@ -84,6 +86,7 @@ export default function DetailsAlbum(props) {
     formData.append('album_image', image.raw);
 
     await api.put(`/albums/${id}/photo`, formData);
+    
     
   }
 
@@ -139,7 +142,7 @@ export default function DetailsAlbum(props) {
           <CreateSong setSong={setSong} song={song} handleNewSong={handleNewSong} />
           {albums.map(album =>
             album.song.map((songs, idx) =>
-              (<p key={songs.id}>{idx + 1} - {songs.name} - {album.image}
+              (<p key={songs.id}>{idx + 1} - {songs.name}
                 <span className="icon has-text-danger"
                   onClick={() => handleDeleteSong(songs.id)}>
                   <i className="fas fa-trash-alt" />
